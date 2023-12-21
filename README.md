@@ -16,3 +16,10 @@ python -m pip install --upgrade pip
 python -m pip install flask
 python -m flask --app .\app.py run
 ```
+
+### Ejecturar en modo desarrollo
+
+```
+python main.py
+python simulator.py
+```
