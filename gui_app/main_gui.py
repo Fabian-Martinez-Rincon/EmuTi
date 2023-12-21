@@ -11,9 +11,10 @@ def process_excel(file_name):
         DATOS = pd.read_excel(file_name,sheet_name=1)
         SIMBOLS = list(filter(SIMBOLS_REGEX.match, DATOS.columns.values))
         ROLLERS = list(filter(ROLLER_REGEX.match, DATOS.columns.values))
+        CAMPOS = SIMBOLS + ROLLERS
 
         DATOS_FILTRADOS = DATOS.loc[:, 
-            (SIMBOLS + ROLLERS)
+            CAMPOS
         ].to_json(orient='records', indent=4)
         
     except FileNotFoundError:
@@ -24,7 +25,7 @@ def process_excel(file_name):
         print(f"Error al procesar {file_name}: {str(e)}")
     else:
         print(f"Procesado {file_name} correctamente")
-        return DATOS_FILTRADOS
+        return DATOS_FILTRADOS, CAMPOS
     
 
 class MainGUI(tk.Frame):
@@ -33,12 +34,14 @@ class MainGUI(tk.Frame):
         self.master = master
         self.grid()
         self.create_widgets()
+
+        self.campos = None
         self.data = None
 
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
-            self.data = process_excel(file_path)
+            self.data, self.campos = process_excel(file_path)
             print(self.data)
         except FileNotFoundError:
             print("La ruta no existe ", file_path)
@@ -76,7 +79,6 @@ class MainGUI(tk.Frame):
     def create_widgets(self):
         self.file_button = tk.Button(self, text="Seleccionar Archivo", command=self.open_file_dialog)
         self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=2)
-
 
         self.auto_var = tk.BooleanVar()
 

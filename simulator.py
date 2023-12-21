@@ -6,13 +6,13 @@ def imprimir_datos(event):
     etiqueta_resultado.config(text="Datos ingresados: " + datos_ingresados)
     ventana.withdraw()
 
-    ventana.after(2000, mostrar_ventana)
+    ventana.after(5000, mostrar_ventana)
 
 def mostrar_ventana():
     ventana.deiconify()  
     etiqueta_resultado.config(text="") 
     entrada.delete(0, tk.END) 
-    entrada.focus_set()
+    #entrada.focus_set()
 
 ventana = tk.Tk()
 ventana.title("Ingreso de Datos")
@@ -22,7 +22,7 @@ etiqueta.pack(pady=10)
 
 entrada = tk.Entry(ventana, width=30)
 entrada.pack(pady=10)
-entrada.focus_set()
+#entrada.focus_set()
 
 entrada.bind('<Return>', imprimir_datos)
 
