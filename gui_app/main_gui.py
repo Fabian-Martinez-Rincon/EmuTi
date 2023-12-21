@@ -1,5 +1,31 @@
 import tkinter as tk
 from tkinter import filedialog
+import re
+import pandas as pd
+
+SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.\d+$')
+ROLLER_REGEX = re.compile(r'^R\d+$')
+
+def process_excel(file_name):
+    try:
+        DATOS = pd.read_excel(file_name,sheet_name=1)
+        SIMBOLS = list(filter(SIMBOLS_REGEX.match, DATOS.columns.values))
+        ROLLERS = list(filter(ROLLER_REGEX.match, DATOS.columns.values))
+
+        DATOS_FILTRADOS = DATOS.loc[:, 
+            (SIMBOLS + ROLLERS)
+        ].to_json(orient='records', indent=4)
+        
+    except FileNotFoundError:
+        print(f"La ruta del archivo no existe: {file_name}")
+    except KeyError:
+        print(f"Columnas no corresponden con {DATOS.columns.values}")
+    except Exception as e:
+        print(f"Error al procesar {file_name}: {str(e)}")
+    else:
+        print(f"Procesado {file_name} correctamente")
+        return DATOS_FILTRADOS
+    
 
 class MainGUI(tk.Frame):
     def __init__(self, master=None, *args, **kwargs):
@@ -7,26 +33,17 @@ class MainGUI(tk.Frame):
         self.master = master
         self.grid()
         self.create_widgets()
-
-        self.program1_instance = None
-        self.program2_instance = None
-        self.file_path = None
-
-    def get_selected_file(self):
-        return self.file_path
-
-    def set_program1_instance(self, program1_instance):
-        self.program1_instance = program1_instance
-
-    def set_program2_instance(self, program2_instance):
-        self.program2_instance = program2_instance
+        self.data = None
 
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
-        if file_path:
-            print ("La ruta del archivo es")
-            print(file_path)
-            self.file_path = file_path
+        try:
+            self.data = process_excel(file_path)
+            print(self.data)
+        except FileNotFoundError:
+            print("La ruta no existe ", file_path)
+        except NotADirectoryError:
+            print("La ruta no es un directorio ", file_path)
 
     def show_window_value(self):
         window_value = self.window_entry.get()
