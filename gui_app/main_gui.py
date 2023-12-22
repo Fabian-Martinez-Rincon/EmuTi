@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import re
 import pandas as pd
+from new_Input.main_input2 import activar_ventana
 
 SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.\d+$')
 ROLLER_REGEX = re.compile(r'^R\d+$')
@@ -32,6 +33,7 @@ class MainGUI(tk.Frame):
 
         self.simbols = None
         self.rollers = None
+        self.auto = False
 
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
@@ -53,12 +55,8 @@ class MainGUI(tk.Frame):
 
     def toggle_automatic(self):
         print("Cambio de estado")
-        current_state = self.auto_var.get()
-        new_state = not current_state
-        self.auto_var.set(new_state)
-        self.update_auto_button()
-
-    def update_auto_button(self):
+        self.auto_var.set(not self.auto_var.get())
+        
         if not self.auto_var.get():
             print("Automático ON")
             self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
@@ -84,10 +82,10 @@ class MainGUI(tk.Frame):
         self.auto_off_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
         self.auto_off_button.grid_remove()
 
-        self.next_button = tk.Button(self, text="Siguiente", command=self.next_step)
+        self.next_button = tk.Button(self, text="Siguiente", command=lambda: activar_ventana(self.next_button, self.result_label))
         self.next_button.grid(row=3, column=0, pady=10, padx=10, columnspan=2)
 
-        self.window_label = tk.Label(self, text="Nombre de la ventana:")
+        self.window_label = tk.Label(self, text="Nombre de la Ventana")
         self.window_label.grid(row=4, column=0, pady=10, padx=10)
 
         self.window_entry = tk.Entry(self)
