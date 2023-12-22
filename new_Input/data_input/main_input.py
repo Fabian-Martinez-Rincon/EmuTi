@@ -21,18 +21,21 @@ PATH_PROSSED = "C:/Users/Fabian/Desktop/Fortuna.xlsx"
 
 SEM_ACTION = False
 
-def activar_ventana(boton):
+def activar_ventana(boton, result_label):
     """Espera a que se abra la ventana y la activa"""
+    boton.config(state=tk.DISABLED)
     while True:
         try:
             ventana = gw.getWindowsWithTitle(TITULO_BASE)[0]            
             ventana.activate()
             boton.config(state=tk.NORMAL)
-            return ventana
+            print("Encontro la ventana")
+            result_label.config(text="Siguiente paso")
+            return
         except IndexError:
-            pyautogui.sleep(1)
+            pass
 
-def mostrar_registro(datos, boton):
+#def mostrar_registro(datos, boton):
     global SEM_ACTION
     os.system('cls')
 
@@ -58,9 +61,7 @@ def mostrar_registro(datos, boton):
     INDICE += 1
     boton.config(state=tk.DISABLED)
 
-def click_boton(datos, boton):
-
-    
+#def click_boton(datos, boton):
     boton.config(state=tk.DISABLED)
     activar_ventana(boton)
 
@@ -70,9 +71,14 @@ def click_boton(datos, boton):
         print("Todos los datos han sido procesados.")
 
 def main():
-    root = tk.Tk()
-    boton = tk.Button(root, text='Siguiente', command=lambda: click_boton(DATA, boton))
+    root = tk.Tk()#click_boton(DATA, boton)
+    result_label = tk.Label(text="")
+    result_label.grid(row=7, column=0, pady=10, padx=10, columnspan=2)
+    boton = tk.Button(root, text='Siguiente', command=lambda: activar_ventana(boton, result_label))
     boton.grid(row=1, column=0, columnspan=2)
+    
+    
+
     root.mainloop()
 
 if __name__ == '__main__':
