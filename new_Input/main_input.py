@@ -10,14 +10,50 @@ import pyautogui
 import os
 
 INDICE = 0
-DATA = [
-    {"SIMBOLO": "W", "SIMBOLO.1": "W", "SIMBOLO.2": "W", "SIMBOLO.3": "W", "SIMBOLO.4": "W", "R1": 3, "R2": 6, "R3": 8, "R4": 32, "R5": 5},
-    {"SIMBOLO": "F", "SIMBOLO.1": "F", "SIMBOLO.2": "F", "SIMBOLO.3": "F", "SIMBOLO.4": "F", "R1": 4, "R2": 11, "R3": 23, "R4": 5, "R5": 12},
-    {"SIMBOLO": "F", "SIMBOLO.1": "F", "SIMBOLO.2": "F", "SIMBOLO.3": "F", "SIMBOLO.4": "W", "R1": 4, "R2": 11, "R3": 23, "R4": 5, "R5": 5},
-    {"SIMBOLO": "F", "SIMBOLO.1": "F", "SIMBOLO.2": "F", "SIMBOLO.3": "W", "SIMBOLO.4": "F", "R1": 4, "R2": 11, "R3": 23, "R4": 32, "R5": 12},
-    {"SIMBOLO": "F", "SIMBOLO.1": "F", "SIMBOLO.2": "F", "SIMBOLO.3": "W", "SIMBOLO.4": "W", "R1": 4, "R2": 11, "R3": 23, "R4": 32, "R5": 5}
+ROLLERS = [
+    {
+        "R1":1,
+        "R2":6,
+        "R3":8,
+        "R4":2,
+        "R5":6
+    },
+    {
+        "R1":3,
+        "R2":17,
+        "R3":4,
+        "R4":2,
+        "R5":10
+    },
+    {
+        "R1":3,
+        "R2":17,
+        "R3":4,
+        "R4":2,
+        "R5":12
+    }
 ]
-CAMPOS = ['SIMBOLO', 'SIMBOLO.1', 'SIMBOLO.2', 'SIMBOLO.3', 'SIMBOLO.4', 'R1', 'R2', 'R3', 'R4', 'R5']
+SIMBOLS = [ 
+    {
+        "SIMBOLO.1":"S0",
+        "SIMBOLO.2":"B2",
+        "SIMBOLO.3":"SK",
+        "SIMBOLO.4":"B2"
+    },
+    {
+        "SIMBOLO.1":"S0",
+        "SIMBOLO.2":"B2",
+        "SIMBOLO.3":"SK",
+        "SIMBOLO.4":"B1"
+    },
+    {
+        "SIMBOLO.1":"S0",
+        "SIMBOLO.2":"B1",
+        "SIMBOLO.3":"SK",
+        "SIMBOLO.4":"B2"
+    }
+]
+
 TITULO_BASE = "Ingreso de Datos"
 
 def activar_ventana(boton, result_label):

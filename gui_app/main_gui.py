@@ -11,11 +11,6 @@ def process_excel(file_name):
         DATOS = pd.read_excel(file_name,sheet_name=1)
         SIMBOLS = list(filter(SIMBOLS_REGEX.match, DATOS.columns.values))
         ROLLERS = list(filter(ROLLER_REGEX.match, DATOS.columns.values))
-        CAMPOS = SIMBOLS + ROLLERS
-
-        DATOS_FILTRADOS = DATOS.loc[:, 
-            CAMPOS
-        ].to_json(orient='records', indent=4)
         
     except FileNotFoundError:
         print(f"La ruta del archivo no existe: {file_name}")
@@ -25,7 +20,7 @@ def process_excel(file_name):
         print(f"Error al procesar {file_name}: {str(e)}")
     else:
         print(f"Procesado {file_name} correctamente")
-        return DATOS_FILTRADOS, CAMPOS
+        return DATOS.loc[:, SIMBOLS].to_json(orient='records', indent=4), DATOS.loc[:, ROLLERS].to_json(orient='records', indent=4)
     
 
 class MainGUI(tk.Frame):
@@ -35,14 +30,14 @@ class MainGUI(tk.Frame):
         self.grid()
         self.create_widgets()
 
-        self.campos = None
-        self.data = None
+        self.simbols = None
+        self.rollers = None
 
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
-            self.data, self.campos = process_excel(file_path)
-            print(self.data)
+            self.simbols, self.rollers = process_excel(file_path)
+            print(self.simbols)
         except FileNotFoundError:
             print("La ruta no existe ", file_path)
         except NotADirectoryError:
