@@ -6,7 +6,7 @@ def imprimir_datos(event):
     etiqueta_resultado.config(text="Datos ingresados: " + datos_ingresados)
     ventana.withdraw()
 
-    ventana.after(5000, mostrar_ventana)
+    ventana.after(3000, mostrar_ventana)
 
 def mostrar_ventana():
     ventana.deiconify()  

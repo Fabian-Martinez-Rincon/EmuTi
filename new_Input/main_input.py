@@ -1,6 +1,7 @@
 import tkinter as tk
 import pygetwindow as gw
 import pyautogui
+import time
 
 INDICE = 0
 ROLLERS = [
@@ -86,7 +87,7 @@ SIMBOLS = [
     }
 ]
 
-TITULO_BASE = "Notepad"
+TITULO_BASE = "Ingreso de Datos"
 
 index = 0
 AUTOMATICO = False
@@ -98,10 +99,27 @@ def actions(result_label, indice):
     result_label.config(text=f"Index {indice}: {values}")
 
     pyautogui.press('tab')
-    pyautogui.press('tab')
-
     pyautogui.write(values)
     pyautogui.press('enter')
+
+def search_window(boton, result_label):
+    """Busca la ventana y la activa"""
+
+    ventana = None
+
+    try:
+        ventana = gw.getWindowsWithTitle(TITULO_BASE)[0]
+    except IndexError:
+        boton.config(state=tk.DISABLED)
+        result_label.config(text="No se encontro la ventana")
+        return False
+    
+    if ventana.isMinimized:
+        ventana.restore()
+
+    ventana.activate()
+    return True
+
 
 def activar_ventana(boton, result_label, auto = None):
     """Espera a que se abra la ventana y la activa"""
@@ -110,48 +128,71 @@ def activar_ventana(boton, result_label, auto = None):
         global AUTOMATICO
         AUTOMATICO = auto
 
-    ventana = None
     global index
-    print(index)
 
     def buscar_ventana():
-        nonlocal ventana
         global index
 
-        try:
-            ventana = gw.getWindowsWithTitle(TITULO_BASE)[0]
-        except IndexError:
-            result_label.config(text="No se encontro la ventana")
-            return
-        
-        if ventana.isMinimized:
-            ventana.restore()
+        if not search_window(boton, result_label):
+            return False
 
-        ventana.activate()
         boton.config(state=tk.NORMAL)
         
-        print(auto)
-        print(AUTOMATICO)
         if AUTOMATICO:
             for i in range(len(ROLLERS)):
                 actions(result_label, i)
-                pyautogui.sleep(1)
+                if not search_window(boton, result_label):
+                    return False
         else:
             actions(result_label, index)
-
-        #except IndexError:
-        #    result_label.config(text="No se encontro la ventana")
+        return True
     
-    boton.config(state=tk.DISABLED)
-    result_label.config(text="Buscando ventana")
 
-    buscar_ventana()
+    # while (auto != False) 
+    # if index < len(ROLLERS):
+    #     if search_window(boton, result_label):
+    #         index += 1
+    #     else:
+    #         result_label.after(3000, activar_ventana, boton, result_label) 
+    # else:
+    #     boton.config(state=tk.DISABLED)            
+    #     result_label.config(text="Terminado")
+
+
+def automatic_mode(boton, result_label):
+    """Automatic Mode"""
+
+    global index
+
+    while (index < len(ROLLERS)):
+        if search_window(boton, result_label):
+            boton.config(state=tk.NORMAL)
+            actions(result_label, index)
+            index += 1
+        else:
+            result_label.after(3000, automatic_mode, boton, result_label) 
+            continue
+
+    boton.config(state=tk.DISABLED)            
+    result_label.config(text="Terminado")
+
+
+def manual_mode(main_gui, boton, result_label):
+    """Manual Mode"""
+    index = main_gui.index_current
+
+    while not search_window(boton, result_label):
+        time.sleep(1)
+        pass
 
     if index < len(ROLLERS):
-        if ventana is None:
-            result_label.after(1000, activar_ventana, boton, result_label) 
-        else:
-            index += 1
+        boton.config(state=tk.NORMAL)
+        actions(result_label, index)
+        main_gui.index_current += 1
+        main_gui.update_index_label()
     else:
         boton.config(state=tk.DISABLED)            
         result_label.config(text="Terminado")
+
+
+    

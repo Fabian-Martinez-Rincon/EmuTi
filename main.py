@@ -3,6 +3,7 @@ import tkinter as tk
 
 def main():
     app = tk.Tk()
+    
     app.title("Emuti")
     app.resizable(False, False)
 
