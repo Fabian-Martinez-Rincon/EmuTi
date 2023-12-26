@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import re
 import pandas as pd
-from new_Input.main_input2 import activar_ventana
+from new_Input.main_input import activar_ventana
 
 SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.\d+$')
 ROLLER_REGEX = re.compile(r'^R\d+$')
@@ -58,13 +58,25 @@ class MainGUI(tk.Frame):
         self.auto_var.set(not self.auto_var.get())
         
         if not self.auto_var.get():
-            print("Automático ON")
+            print("Automático OFF")
             self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
             self.auto_off_button.grid_remove()
         else:
-            print("Automático OFF")
+            print("Automático ON")
+            
             self.auto_on_button.grid_remove()
             self.auto_off_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
+        
+    def activate_auto(self):
+        print("Automático ON")
+        self.auto_on_button.grid_remove()
+        self.auto_off_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
+        activar_ventana(self.next_button, self.result_label, auto = True)
+
+    def deactivate_auto(self):
+        print("Automático OFF")
+        self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
+        self.auto_off_button.grid_remove()
 
     def next_step(self):
         self.result_label.config(text="Siguiente paso")
@@ -75,10 +87,10 @@ class MainGUI(tk.Frame):
 
         self.auto_var = tk.BooleanVar()
 
-        self.auto_on_button = tk.Button(self, text="▶️", command=self.toggle_automatic)
+        self.auto_on_button = tk.Button(self, text="▶️", command=self.activate_auto)
         self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
 
-        self.auto_off_button = tk.Button(self, text="⏸️", command=self.toggle_automatic)
+        self.auto_off_button = tk.Button(self, text="⏸️", command=self.deactivate_auto)
         self.auto_off_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
         self.auto_off_button.grid_remove()
 
