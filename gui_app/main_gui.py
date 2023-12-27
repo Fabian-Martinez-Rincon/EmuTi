@@ -10,91 +10,8 @@ import time
 
 
 
-SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.\d+$')
+SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.?\d+$')
 ROLLER_REGEX = re.compile(r'^R\d+$')
-
-ROLLERS = [
-    {
-        "R1":1,
-        "R2":6,
-        "R3":8,
-        "R4":2,
-        "R5":6
-    },
-    {
-        "R1":3,
-        "R2":17,
-        "R3":4,
-        "R4":2,
-        "R5":10
-    },
-    {
-        "R1":3,
-        "R2":17,
-        "R3":4,
-        "R4":2,
-        "R5":12
-    },
-        {
-        "R1":1,
-        "R2":6,
-        "R3":8,
-        "R4":2,
-        "R5":6
-    },
-    {
-        "R1":3,
-        "R2":17,
-        "R3":4,
-        "R4":2,
-        "R5":10
-    },
-    {
-        "R1":3,
-        "R2":17,
-        "R3":4,
-        "R4":2,
-        "R5":12
-    }
-]
-SIMBOLS = [ 
-    {
-        "SIMBOLO.1":"S0",
-        "SIMBOLO.2":"B2",
-        "SIMBOLO.3":"SK",
-        "SIMBOLO.4":"B2"
-    },
-    {
-        "SIMBOLO.1":"S0",
-        "SIMBOLO.2":"B2",
-        "SIMBOLO.3":"SK",
-        "SIMBOLO.4":"B1"
-    },
-    {
-        "SIMBOLO.1":"S0",
-        "SIMBOLO.2":"B1",
-        "SIMBOLO.3":"SK",
-        "SIMBOLO.4":"B2"
-    },
-    {
-        "SIMBOLO.1":"S0",
-        "SIMBOLO.2":"B2",
-        "SIMBOLO.3":"SK",
-        "SIMBOLO.4":"B2"
-    },
-    {
-        "SIMBOLO.1":"S0",
-        "SIMBOLO.2":"B2",
-        "SIMBOLO.3":"SK",
-        "SIMBOLO.4":"B1"
-    },
-    {
-        "SIMBOLO.1":"S0",
-        "SIMBOLO.2":"B1",
-        "SIMBOLO.3":"SK",
-        "SIMBOLO.4":"B2"
-    }
-]
 
 def search_window():
         """Busca la ventana y la activa"""
@@ -110,11 +27,17 @@ def search_window():
         ventana.activate()
         return True
 
-def actions(result_label, indice):
+def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers):
+    
+    rollers = eval(rollers)
+    values = ",".join(str(value) for value in rollers[indice].values())
+    result_label_rollers.config(text=f"{values}")
 
-    values = ",".join(str(value) for value in ROLLERS[indice].values())
-    print(f"Index {indice}: {values}")
-    result_label.config(text=f"Index {indice}: {values}")
+    #print(simbols)
+    #simbols = eval(simbols)
+    #print(simbols)
+    #simbols = ",".join(str(value) for value in simbols[indice].values())
+    #result_label_simbol.config(text=f"{simbols}")
 
     pyautogui.press('tab')
     pyautogui.write(values)
@@ -148,9 +71,6 @@ class MainGUI(tk.Frame):
         self.simbols = None
         self.rollers = None
         
-
-    
-
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
@@ -216,15 +136,22 @@ class MainGUI(tk.Frame):
               encuentra activada la ventana
         """
 
+        if not self.rollers:
+            print("No hay datos para procesar")
+            return
+
         next_button.config(state=tk.DISABLED)         
         index = self.index_current
+
+        
         while not search_window():
             time.sleep(1)
             pass
         
+        
 
-        if index < len(ROLLERS):
-            actions(self.result_label_rollers, index)
+        if index < len(self.rollers):
+            actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
             self.index_current += 1
             self.update_index_label()
         else:
@@ -276,7 +203,7 @@ class MainGUI(tk.Frame):
         self.show_window_button = tk.Button(self, text="Confirmar", command=self.show_window_value, **button_style)
         self.show_window_button.grid(row=5, column=4, pady=10, padx=10, columnspan=2)
 
-        self.custom_index_label = tk.Label(self, text="COLUMNA EXCEL:", bg="#add8e6")
+        self.custom_index_label = tk.Label(self, text="INDICE NUEVO:", bg="#add8e6")
         self.custom_index_label.grid(row=6, column=0, pady=10, padx=10 , columnspan=2)
 
         self.custom_index_entry = tk.Entry(self)
@@ -294,15 +221,13 @@ class MainGUI(tk.Frame):
         self.result_label_rollers = tk.Label(self, text="1, 1, 1, 1, 1")
         self.result_label_rollers.grid(row=8, column=3, pady=10, padx=10, columnspan=2)
 
-        self.index_label = tk.Label(self, text=f"Índice Actual: {self.index_current}")
+        self.index_label = tk.Label(self, text=f"INDICE : {self.index_current}")
         self.index_label.grid(row=9, column=2, pady=10, padx=10, columnspan=2)
 
         self.close_button = tk.Button(self, text="Cerrar", command=self.master.destroy, **button_style)
         self.close_button.grid(row=10, column=2, pady=10, padx=10, columnspan=2)
 
         
-
-
     def update_index_label(self):
         self.index_label.config(text=f"Índice: {self.index_current}")
 
