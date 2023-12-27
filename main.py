@@ -8,6 +8,7 @@ def main():
     app.resizable(False, False)
 
     gui_instance = MainGUI(master=app)
+    gui_instance.configure(bg="#add8e6") 
     gui_instance.mainloop()
 
 if __name__ == "__main__":

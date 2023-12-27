@@ -180,19 +180,21 @@ def automatic_mode(boton, result_label):
 def manual_mode(main_gui, boton, result_label):
     """Manual Mode"""
     index = main_gui.index_current
+    print("HOLAAAA")
+    boton.config(state=tk.DISABLED)
 
     while not search_window(boton, result_label):
         time.sleep(1)
         pass
 
     if index < len(ROLLERS):
-        boton.config(state=tk.NORMAL)
         actions(result_label, index)
         main_gui.index_current += 1
         main_gui.update_index_label()
     else:
-        boton.config(state=tk.DISABLED)            
         result_label.config(text="Terminado")
+    
+    main_gui.master.after(2000,boton.config(state=tk.NORMAL))
 
 
     
