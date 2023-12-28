@@ -10,6 +10,9 @@ Mi idea es que al principio tengas un excel de ejemplo para ingresar en la web.
 
 
 ```
+pip install -r requirements.txt
+
+
 python -m venv venv
 .venv\Scripts\activate
 python -m pip install --upgrade pip

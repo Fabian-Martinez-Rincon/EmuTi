@@ -1,11 +1,16 @@
 import tkinter as tk
 
+contador = 0
+
 def imprimir_datos(event):
+    global contador
     datos_ingresados = entrada.get()
     print(datos_ingresados)
+    print("Contador: ", contador)
     etiqueta_resultado.config(text="Datos ingresados: " + datos_ingresados)
     ventana.withdraw()
 
+    contador += 1
     ventana.after(3000, mostrar_ventana)
 
 def mostrar_ventana():

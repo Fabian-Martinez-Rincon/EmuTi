@@ -2,22 +2,20 @@ import tkinter as tk
 from tkinter import filedialog
 import re
 import pandas as pd
-#from new_Input.main_input import manual_mode
-from new_Input.main_input import automatic_mode
 import pygetwindow as gw
 import pyautogui
 import time
+from tkinter import messagebox
 
 
-
-SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.?\d+$')
+SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.?\d*$')
 ROLLER_REGEX = re.compile(r'^R\d+$')
 
-def search_window():
+def search_window(window):
         """Busca la ventana y la activa"""
         ventana = None
         try:
-            ventana = gw.getWindowsWithTitle("Ingreso de Datos")[0]
+            ventana = gw.getWindowsWithTitle(window)[0]
         except IndexError:
             return False
         
@@ -33,11 +31,9 @@ def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers)
     values = ",".join(str(value) for value in rollers[indice].values())
     result_label_rollers.config(text=f"{values}")
 
-    #print(simbols)
-    #simbols = eval(simbols)
-    #print(simbols)
-    #simbols = ",".join(str(value) for value in simbols[indice].values())
-    #result_label_simbol.config(text=f"{simbols}")
+    simbols = eval(simbols)
+    simbols = ",".join(str(value) for value in simbols[indice].values())
+    result_label_simbol.config(text=f"{simbols}")
 
     pyautogui.press('tab')
     pyautogui.write(values)
@@ -65,17 +61,22 @@ class MainGUI(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self.master = master
         self.index_current = 0
+        self.window_current = "Ingreso de Datos"
         self.grid()
         self.create_widgets()
 
         self.simbols = None
         self.rollers = None
+
+        self.auto_var = tk.BooleanVar()
+        self.auto_on_button.config(variable=self.auto_var)
+
+        self.interval_id = None
         
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
             self.simbols, self.rollers = process_excel(file_path)
-            print(self.simbols)
         except FileNotFoundError:
             print("La ruta no existe ", file_path)
         except NotADirectoryError:
@@ -88,43 +89,6 @@ class MainGUI(tk.Frame):
     def show_numeric_value(self):
         numeric_value = self.value_entry.get()
         print(f"Valor numérico: {numeric_value}")
-
-    def toggle_automatic(self):
-        print("Cambio de estado")
-        self.auto_var.set(not self.auto_var.get())
-        
-        if not self.auto_var.get():
-            print("Automático OFF")
-            self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
-            self.auto_off_button.grid_remove()
-        else:
-            print("Automático ON")
-            
-            self.auto_on_button.grid_remove()
-            self.auto_off_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
-        
-    # def activate_auto(self):
-    #     print("Automático ON")
-    #     #automatic_mode(self.next_button, self.result_label_rollers)
-
-    # def deactivate_auto(self):
-    #     print("Automático OFF")
-
-    def activate_auto(self):
-        self.auto_var.set(1)  # Activar el botón "Activar"
-        print("Automático ON")
-        self.auto_on_button.config(state=tk.DISABLED)
-        self.auto_off_button.config(state=tk.NORMAL)
-
-    def deactivate_auto(self):
-        self.auto_var.set(0)  # Activar el botón "Desactivar"
-        print("Automático OFF")
-        self.auto_on_button.config(state=tk.NORMAL)
-        self.auto_off_button.config(state=tk.DISABLED)
-        
-
-    def next_step(self):
-        self.result_label_rollers.config(text="Siguiente paso")
 
     def press_button_manual(self, next_button):
         """Manual 
@@ -142,14 +106,11 @@ class MainGUI(tk.Frame):
 
         next_button.config(state=tk.DISABLED)         
         index = self.index_current
-
         
-        while not search_window():
+        while not search_window(self.window_current):
             time.sleep(1)
             pass
         
-        
-
         if index < len(self.rollers):
             actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
             self.index_current += 1
@@ -160,10 +121,24 @@ class MainGUI(tk.Frame):
         self.master.after(1000, lambda: self.enable_button(next_button))
 
     def enable_button(self, next_button):
-        while not search_window():
+        while not search_window(self.window_current):
             time.sleep(1)
             pass
         next_button.config(state=tk.NORMAL)
+
+    def toggle_auto(self):
+        if self.auto_var.get():
+            self.interval_id = self.master.after(2000, self.press_button_auto)  # Imprimir cada 2000 ms (2 segundos)
+        else:
+            if self.interval_id:
+                self.master.after_cancel(self.interval_id)
+                self.interval_id = None
+                print("Se desactivo todo")
+
+    def press_button_auto(self):
+        print("Mensaje cada 2 segundos")
+        self.press_button_manual(self.next_button)
+        self.interval_id = self.master.after(2000, self.press_button_auto)
 
     def create_widgets(self):
 
@@ -172,21 +147,11 @@ class MainGUI(tk.Frame):
         self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
         self.file_button.grid(row=0, column=2, pady=10, padx=10, columnspan=2)
 
-        self.auto_var = tk.BooleanVar()
-
         self.auto_title_label = tk.Label(self, text="AUTOMATICO", font=("Helvetica", 12, "bold"), bg="#add8e6")
         self.auto_title_label.grid(row=1, column=2, pady=10, padx=10, columnspan=2)
 
-        self.auto_on_button = tk.Button(self, text="ACTIVAR", command=self.activate_auto, **button_style)
-        self.auto_on_button.grid(row=2, column=1, pady=10, padx=10, columnspan=2)
-        self.auto_on_button.config(state=tk.NORMAL) 
-
-        self.auto_off_button = tk.Button(self, text="DESACTIVAR", command=self.deactivate_auto, **button_style)
-        self.auto_off_button.grid(row=2, column=3, pady=10, padx=10, columnspan=2)
-        self.auto_off_button.config(state=tk.DISABLED)
-
-        self.auto_on_button["state"] = "disabled"
-        self.auto_off_button["state"] = "active"
+        self.auto_on_button = tk.Checkbutton(self, text="Activar", command=self.toggle_auto)
+        self.auto_on_button.grid(row=2, column=3, pady=10, padx=10)
         
         self.auto_title_label = tk.Label(self, text="Tradicional", font=("Helvetica", 12, "bold"), bg="#add8e6")
         self.auto_title_label.grid(row=3, column=2, pady=10, padx=10, columnspan=2)
@@ -200,7 +165,7 @@ class MainGUI(tk.Frame):
         self.window_entry = tk.Entry(self)
         self.window_entry.grid(row=5, column=2, pady=10, padx=10 , columnspan=2)
 
-        self.show_window_button = tk.Button(self, text="Confirmar", command=self.show_window_value, **button_style)
+        self.show_window_button = tk.Button(self, text="Confirmar", command=self.update_window_index, **button_style)
         self.show_window_button.grid(row=5, column=4, pady=10, padx=10, columnspan=2)
 
         self.custom_index_label = tk.Label(self, text="INDICE NUEVO:", bg="#add8e6")
@@ -227,7 +192,17 @@ class MainGUI(tk.Frame):
         self.close_button = tk.Button(self, text="Cerrar", command=self.master.destroy, **button_style)
         self.close_button.grid(row=10, column=2, pady=10, padx=10, columnspan=2)
 
-        
+    def update_window_label(self):
+        self.window_label.config(text=f"{self.window_current}")
+
+    def update_window_index(self):
+        try:
+            new_window = str(self.window_entry.get())
+            self.window_current = new_window
+            self.update_window_label()
+        except ValueError:
+            print("Ingrese un valor String para la ventana.")
+
     def update_index_label(self):
         self.index_label.config(text=f"Índice: {self.index_current}")
 
