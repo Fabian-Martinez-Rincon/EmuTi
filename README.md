@@ -10,14 +10,21 @@
 
 ### Nuevo
 
-
 ```
 pip install -r requirements.txt
 ```
 
-### Ejecturar en modo desarrollo
+#### Ejecturar en modo desarrollo
 
 ```
 python main.py
+```
+
+#### Simulador de Ingreso de Datos
+
+![Alt text](/otros.py/image.png)
+
+
+```
 python simulator.py
 ```
