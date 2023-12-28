@@ -61,7 +61,7 @@ class MainGUI(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self.master = master
         self.index_current = 0
-        self.window_current = "Ingreso de Datos"
+        self.window_current = ""
         self.grid()
         self.create_widgets()
 
@@ -101,7 +101,11 @@ class MainGUI(tk.Frame):
         """
 
         if not self.rollers:
-            print("No hay datos para procesar")
+            messagebox.showinfo("Error", "Seleccione un archivo")
+            return
+        
+        if not self.window_current:
+            messagebox.showinfo("Error", "Ingrese una ventana")
             return
 
         next_button.config(state=tk.DISABLED)         
