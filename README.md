@@ -1,23 +1,18 @@
+<div align="center">
+
 # EmuTi
-> Web para Emular Datos en cualquier tipo de juego
 
-Mi idea es que al principio tengas un excel de ejemplo para ingresar en la web.
+</div>
 
-- Ingresas el nombre de la ventana en donde queres ingresar los datos
+> Software para testear NRG de una maquina
 
+![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/b571b86d-092c-4398-a842-59f0da2ef49a)
 
 ### Nuevo
 
 
 ```
 pip install -r requirements.txt
-
-
-python -m venv venv
-.venv\Scripts\activate
-python -m pip install --upgrade pip
-python -m pip install flask
-python -m flask --app .\app.py run
 ```
 
 ### Ejecturar en modo desarrollo
