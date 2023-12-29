@@ -6,7 +6,8 @@
 
 > Software para testear NRG de una maquina
 
-![image](https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/b571b86d-092c-4398-a842-59f0da2ef49a)
+
+![Alt text](assets/image.png)
 
 ### Nuevo
 
@@ -20,10 +21,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-#### Simulador de Ingreso de Datos
-
-![Alt text](/otros.py/image.png)
-
+#### Simulador de Ingreso de datos
 
 ```
 python simulator.py
