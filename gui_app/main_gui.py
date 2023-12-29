@@ -4,7 +4,6 @@ import re
 import pandas as pd
 import pygetwindow as gw
 import pyautogui
-import time
 from tkinter import messagebox
 
 
@@ -24,6 +23,17 @@ def search_window(window):
 
         ventana.activate()
         return True
+    
+    
+def actual_data(result_label_rollers, result_label_simbol, indice, simbols, rollers):
+    
+    rollers = eval(rollers)
+    values = ",".join(str(value) for value in rollers[indice].values())
+    result_label_rollers.config(text=f"{values}")
+
+    simbols = eval(simbols)
+    simbols = ",".join(str(value) for value in simbols[indice].values())
+    result_label_simbol.config(text=f"{simbols}")
 
 def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers):
     
@@ -115,11 +125,11 @@ class MainGUI(tk.Frame):
         """
 
         if not self.rollers:
-            self.mostrar_error_temporal("Seleccione un archivo")
+            messagebox.showinfo("Error", "Seleccione un archivo")
             return
         
         if not self.window_current:
-            self.mostrar_error_temporal("Ingrese una ventana")
+            messagebox.showinfo("Error","Ingrese una ventana")
             return
         
         if not search_window(self.window_current):
@@ -160,52 +170,61 @@ class MainGUI(tk.Frame):
         button_style = {"font": ("Helvetica", 10), "bd": 2, "relief": tk.GROOVE}
 
         self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
-        self.file_button.grid(row=0, column=2, pady=10, padx=10, columnspan=2)
+        self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=5)
 
-        self.auto_title_label = tk.Label(self, text="AUTOMATICO", font=("Helvetica", 12, "bold"), bg="#add8e6")
+        self.auto_title_label = tk.Label(self, text="AUTO", font=("Helvetica", 10, "bold"), bg="#add8e6")
+        self.auto_title_label.grid(row=1, column=0, pady=10, padx=10, columnspan=2)        
+
+        self.auto_on_button = tk.Checkbutton(self, text="ACTIVAR", command=self.toggle_auto)
+        self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
+
+        self.auto_title_label = tk.Label(self, text="MANUAL", font=("Helvetica", 10, "bold"), bg="#add8e6")
         self.auto_title_label.grid(row=1, column=2, pady=10, padx=10, columnspan=2)
-
-        self.auto_on_button = tk.Checkbutton(self, text="Activar", command=self.toggle_auto)
-        self.auto_on_button.grid(row=2, column=3, pady=10, padx=10)
         
-        self.auto_title_label = tk.Label(self, text="Tradicional", font=("Helvetica", 12, "bold"), bg="#add8e6")
-        self.auto_title_label.grid(row=3, column=2, pady=10, padx=10, columnspan=2)
+        self.next_button = tk.Button(self, text="INGRESAR", command=lambda: self.press_button_manual(self.next_button), **button_style)
+        self.next_button.grid(row=2, column=2, pady=10, padx=10, columnspan=2)
 
-        self.next_button = tk.Button(self, text="SIGUIENTE", command=lambda: self.press_button_manual(self.next_button), **button_style)
-        self.next_button.grid(row=4, column=2, pady=10, padx=10, columnspan=2)
-
-        self.window_label = tk.Label(self, text="VENTANA:", bg="#add8e6")
-        self.window_label.grid(row=5, column=0, pady=10, padx=10, columnspan=2)
+        self.window_label = tk.Label(self, text="VENTANA", bg="#add8e6")
+        self.window_label.grid(row=3, column=0, pady=10, padx=10, columnspan=2)
 
         self.window_entry = tk.Entry(self)
-        self.window_entry.grid(row=5, column=2, pady=10, padx=10 , columnspan=2)
+        self.window_entry.grid(row=4, column=0, pady=10, padx=10 , columnspan=2)
 
         self.show_window_button = tk.Button(self, text="Confirmar", command=self.update_window_index, **button_style)
-        self.show_window_button.grid(row=5, column=4, pady=10, padx=10, columnspan=2)
+        self.show_window_button.grid(row=5, column=0, pady=10, padx=10, columnspan=2)
 
-        self.custom_index_label = tk.Label(self, text="INDICE NUEVO:", bg="#add8e6")
-        self.custom_index_label.grid(row=6, column=0, pady=10, padx=10 , columnspan=2)
+        self.custom_index_label = tk.Label(self, text="INDICE NUEVO", bg="#add8e6")
+        self.custom_index_label.grid(row=3, column=2, pady=10, padx=10 , columnspan=2)
 
         self.custom_index_entry = tk.Entry(self)
-        self.custom_index_entry.grid(row=6, column=2, pady=10, padx=10, columnspan=2)
+        self.custom_index_entry.grid(row=4, column=2, pady=10, padx=10, columnspan=2)
 
         self.update_custom_index_button = tk.Button(self, text="ACTUALIZAR", command=self.update_custom_index, **button_style)
-        self.update_custom_index_button.grid(row=6, column=4, pady=10, padx=10 , columnspan=2)
+        self.update_custom_index_button.grid(row=5, column=2, pady=10, padx=10 , columnspan=2)
 
-        self.auto_title_label = tk.Label(self, text="DATOS CONFIRMADOS", font=("Helvetica", 12, "bold"), bg="#add8e6")
-        self.auto_title_label.grid(row=7, column=2, pady=10, padx=10, columnspan=2)
+        self.auto_title_label = tk.Label(self, text="DATOS INGRESADOS", bg="#add8e6")
+        self.auto_title_label.grid(row=6, column=0, pady=10, padx=10, columnspan=2)
 
         self.result_label_simbol = tk.Label(self, text="W, W, W, W, W")
-        self.result_label_simbol.grid(row=8, column=1, pady=10, padx=10, columnspan=2)
+        self.result_label_simbol.grid(row=7, column=0, pady=10, padx=10, columnspan=2)
 
         self.result_label_rollers = tk.Label(self, text="1, 1, 1, 1, 1")
-        self.result_label_rollers.grid(row=8, column=3, pady=10, padx=10, columnspan=2)
+        self.result_label_rollers.grid(row=8, column=0, pady=10, padx=10, columnspan=2)
+        
+        self.auto_title_label = tk.Label(self, text="INDICE DATOS", bg="#add8e6")
+        self.auto_title_label.grid(row=6, column=2, pady=10, padx=10, columnspan=2)
+
+        self.result_label_simbol2 = tk.Label(self, text="W, W, W, W, W")
+        self.result_label_simbol2.grid(row=7, column=2, pady=10, padx=10, columnspan=2)
+
+        self.result_label_rollers2 = tk.Label(self, text="1, 1, 1, 1, 1")
+        self.result_label_rollers2.grid(row=8, column=2, pady=10, padx=10, columnspan=2)
 
         self.index_label = tk.Label(self, text=f"INDICE : {self.index_current}")
-        self.index_label.grid(row=9, column=2, pady=10, padx=10, columnspan=2)
+        self.index_label.grid(row=9, column=0, pady=10, padx=10, columnspan=5)
 
         self.close_button = tk.Button(self, text="Cerrar", command=self.master.destroy, **button_style)
-        self.close_button.grid(row=10, column=2, pady=10, padx=10, columnspan=2)
+        self.close_button.grid(row=10, column=0, pady=10, padx=10, columnspan=5)
 
     def update_window_label(self):
         self.window_label.config(text=f"{self.window_current}")
@@ -225,6 +244,7 @@ class MainGUI(tk.Frame):
         try:
             new_index = int(self.custom_index_entry.get())
             self.index_current = new_index
+            actual_data(self.result_label_rollers2, self.result_label_simbol2, self.index_current, self.simbols, self.rollers)
             self.update_index_label()
         except ValueError:
             print("Ingrese un valor numérico para el índice personalizado.")
