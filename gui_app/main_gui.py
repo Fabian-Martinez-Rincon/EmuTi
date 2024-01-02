@@ -65,10 +65,13 @@ class MainGUI(tk.Frame):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
             self.simbols, self.rollers = process_excel(file_path)
+            
         except FileNotFoundError:
             print("La ruta no existe ", file_path)
         except NotADirectoryError:
             print("La ruta no es un directorio ", file_path)
+        except ValueError as e:
+            print(e)
 
     def show_window_value(self):
         window_value = self.window_entry.get()
