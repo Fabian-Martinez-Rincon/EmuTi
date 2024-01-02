@@ -1,14 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
-import re
-import pandas as pd
 import pygetwindow as gw
 import pyautogui
 from tkinter import messagebox
-
-
-SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.?\d*$')
-ROLLER_REGEX = re.compile(r'^R\d+$')
+from gui_app.data_process import process_excel
 
 def search_window(window):
         """Busca la ventana y la activa"""
@@ -48,23 +43,6 @@ def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers)
     pyautogui.press('tab')
     pyautogui.write(values)
     pyautogui.press('enter')
-
-def process_excel(file_name):
-    try:
-        DATOS = pd.read_excel(file_name,sheet_name=1)
-        SIMBOLS = list(filter(SIMBOLS_REGEX.match, DATOS.columns.values))
-        ROLLERS = list(filter(ROLLER_REGEX.match, DATOS.columns.values))
-        
-    except FileNotFoundError:
-        print(f"La ruta del archivo no existe: {file_name}")
-    except KeyError:
-        print(f"Columnas no corresponden con {DATOS.columns.values}")
-    except Exception as e:
-        print(f"Error al procesar {file_name}: {str(e)}")
-    else:
-        print(f"Procesado {file_name} correctamente")
-        return DATOS.loc[:, SIMBOLS].to_json(orient='records', indent=4), DATOS.loc[:, ROLLERS].to_json(orient='records', indent=4)
-    
 
 class MainGUI(tk.Frame):
     def __init__(self, master=None, *args, **kwargs):
