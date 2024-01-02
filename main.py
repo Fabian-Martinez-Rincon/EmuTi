@@ -3,7 +3,7 @@ import tkinter as tk
 
 def main():
     app = tk.Tk()
-    
+    print("probando")
     app.title("Emuti")
     app.resizable(False, False)
 
