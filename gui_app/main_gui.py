@@ -4,20 +4,8 @@ import pygetwindow as gw
 import pyautogui
 from tkinter import messagebox
 from gui_app.data_process import process_excel
+from gui_app._macros import *
 
-def mostrar_error_temporal(master ,mensaje, tiempo_milisegundos=2000):
-        popup = tk.Toplevel(master)
-        popup.title("Error")
-        popup.geometry("300x50")
-
-        # Estilos
-        popup.configure(bg="#00FFFF")  # Color de fondo blanco
-        label_style = {"font": ("Bolt", 12), "foreground": "#FF0000", "background": "#FFFFFF"}
-
-        label = tk.Label(popup, text=mensaje, **label_style)
-        label.pack(pady=10)
-
-        popup.after(tiempo_milisegundos, popup.destroy)
 
 def search_window(window, master):
         """Busca la ventana y la activa"""
@@ -26,15 +14,13 @@ def search_window(window, master):
             ventana = gw.getWindowsWithTitle(window)[0]
         except IndexError:
             return False
-        
         try:
             if ventana.isMinimized:
                 ventana.restore()
-
             ventana.activate()
             return True
         except Exception as e:
-            mostrar_error_temporal(master, "Ocurrio una excepcion")
+            alert_error(master, "ERROR AL BUSCAR LA VENTANA")
             return False
     
     
@@ -83,7 +69,6 @@ class MainGUI(tk.Frame):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
             self.simbols, self.rollers = process_excel(file_path)
-            
         except FileNotFoundError:
             print("La ruta no existe ", file_path)
         except NotADirectoryError:
@@ -91,16 +76,7 @@ class MainGUI(tk.Frame):
         except ValueError as e:
             print(e)
 
-    def show_window_value(self):
-        window_value = self.window_entry.get()
-        print(f"Valor de la ventana: {window_value}")
 
-    def show_numeric_value(self):
-        numeric_value = self.value_entry.get()
-        print(f"Valor numérico: {numeric_value}")
-
-    
-        
     def press_button_manual(self, next_button):
         """Manual 
             El boton esta desactivado por defecto hasta que encuentre la ventana
@@ -120,7 +96,7 @@ class MainGUI(tk.Frame):
             return
         
         if not search_window(self.window_current, self.master):
-            mostrar_error_temporal(self,"La ventana no esta activa")
+            alert_error(self,"VENTANA INACTIVA")
             return
 
         next_button.config(state=tk.DISABLED)
@@ -140,15 +116,15 @@ class MainGUI(tk.Frame):
 
     def toggle_auto(self):
         if self.auto_var.get():
-            self.interval_id = self.master.after(2000, self.press_button_auto) 
+            self.interval_id = self.master.after(2000, self.press_button_auto)
+            alert_success(self,"AUTO INICIADO")
         else:
             if self.interval_id:
                 self.master.after_cancel(self.interval_id)
                 self.interval_id = None
-                print("Se desactivo todo")
+                alert_success(self,"AUTO DETENIDO")
 
     def press_button_auto(self):
-        print("Mensaje cada 2 segundos")
         self.press_button_manual(self.next_button)
         self.interval_id = self.master.after(2000, self.press_button_auto)
 

@@ -21,8 +21,6 @@ def json_process(data, simbols, rollers):
     simbols_data = json.loads(SIMBOLS_JSON)
     rollers_data = json.loads(ROLLERS_JSON)
 
-    print("Cantidad de Elementos:", len(simbols_data) + 1 )
-
     index_null_simbols = [
         index for index, item in enumerate(simbols_data)
         if any(value is None for value in item.values())
@@ -68,9 +66,4 @@ def process_excel(file_name):
     else:
         print(f"Procesado {file_name} correctamente")
     
-    if SIMBOLS_JSON is None:
-        print("Es None")
-    else:
-        print("SIMBOLS:", len(json.loads(SIMBOLS_JSON)) + 1 )
-        print("Es None")
     return SIMBOLS_JSON, ROLLERS_JSON
