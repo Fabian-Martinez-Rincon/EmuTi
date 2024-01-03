@@ -1,14 +1,26 @@
 import tkinter as tk
 
 BACKGROUND_COLOR_ERROR = "#2f2d2d"
-
-BACKGROUND_COLOR_SUCCESS = "##699fd0"
+BACKGROUND_COLOR_SUCCESS = "#699fd0"
 
 STYLE_ERROR = {
   "font": ("Bolt", 12), 
   "foreground": "#FFFFFF", 
   "background": BACKGROUND_COLOR_ERROR
 }
+
+STYLE_SUCCESS = {
+  "font": ("Bolt", 12), 
+  "foreground": "#FFFFFF", 
+  "background": BACKGROUND_COLOR_SUCCESS
+}
+
+STYLE_TITLE = {
+  "font": ("Helvetica", 10, "bold"), 
+  "bg":"#add8e6"
+}
+
+
 
 def alert_error(window , message, timer=2000):
     popup = tk.Toplevel(window)
@@ -22,16 +34,6 @@ def alert_error(window , message, timer=2000):
 
     popup.after(timer, popup.destroy)
 
-
-BACKGROUND_COLOR_SUCCESS = "#699fd0"
-
-STYLE_SUCCESS = {
-  "font": ("Bolt", 12), 
-  "foreground": "#FFFFFF", 
-  "background": BACKGROUND_COLOR_SUCCESS
-}
-
-
 def alert_success(window , message, timer=2000):
     popup = tk.Toplevel(window)
     popup.title("CAMBIO DE ESTADO")
@@ -43,3 +45,11 @@ def alert_success(window , message, timer=2000):
     label.pack(pady=10)
 
     popup.after(timer, popup.destroy)
+
+PADY=10
+PADX=10
+COLUMNSPAN=2
+
+def label_style(master, message, x, y):
+    master.auto_title_label = tk.Label(master, text=message, **STYLE_TITLE)
+    master.auto_title_label.grid(row=x, column=y, pady=PADY, padx=PADX, columnspan=COLUMNSPAN)

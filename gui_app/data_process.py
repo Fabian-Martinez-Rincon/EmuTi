@@ -9,10 +9,6 @@ ROLLER_REGEX = re.compile(r'^R\d+$')
 
 PATH_BASE = os.path.dirname(os.path.dirname(__file__))
 
-PATH_PROSSED = os.path.join(PATH_BASE, "processed_datasets")
-if not os.path.exists(PATH_PROSSED):
-    os.makedirs(PATH_PROSSED, exist_ok=True)
-
 def json_process(data, simbols, rollers):
     
     SIMBOLS_JSON = data.loc[:, simbols].to_json(orient='records', indent=4)

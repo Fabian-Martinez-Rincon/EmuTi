@@ -76,7 +76,6 @@ class MainGUI(tk.Frame):
         except ValueError as e:
             print(e)
 
-
     def press_button_manual(self, next_button):
         """Manual 
             El boton esta desactivado por defecto hasta que encuentre la ventana
@@ -135,14 +134,12 @@ class MainGUI(tk.Frame):
         self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
         self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=5)
 
-        self.auto_title_label = tk.Label(self, text="AUTO", font=("Helvetica", 10, "bold"), bg="#add8e6")
-        self.auto_title_label.grid(row=1, column=0, pady=10, padx=10, columnspan=2)        
+        label_style(self, "AUTOMATICO", 1, 0)
 
         self.auto_on_button = tk.Checkbutton(self, text="ACTIVAR", command=self.toggle_auto)
         self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
-
-        self.auto_title_label = tk.Label(self, text="MANUAL", font=("Helvetica", 10, "bold"), bg="#add8e6")
-        self.auto_title_label.grid(row=1, column=2, pady=10, padx=10, columnspan=2)
+        
+        label_style(self, "MANUAL", 1, 2)
         
         self.next_button = tk.Button(self, text="INGRESAR", command=lambda: self.press_button_manual(self.next_button), **button_style)
         self.next_button.grid(row=2, column=2, pady=10, padx=10, columnspan=2)
