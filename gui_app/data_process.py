@@ -43,9 +43,9 @@ def process_excel(file_name):
     ROLLERS_JSON = None
     
     try:
-        DATOS = pd.read_excel(file_name, sheet_name=1)
+        DATOS = pd.read_excel(file_name, sheet_name=0)
         values = DATOS.columns.values
-
+        print(values)
         SIMBOLS = list(filter(SIMBOLS_REGEX.match, values))
         ROLLERS = list(filter(ROLLER_REGEX.match, values))
 

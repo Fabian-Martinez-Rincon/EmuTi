@@ -20,7 +20,7 @@ def search_window(window, master):
             ventana.activate()
             return True
         except Exception as e:
-            alert_error(master, "ERROR AL BUSCAR LA VENTANA")
+            alert_except(master, "ERROR AL ACTIVAR LA VENTANA")
             return False
     
     
@@ -70,7 +70,7 @@ class MainGUI(tk.Frame):
         try:
             self.simbols, self.rollers = process_excel(file_path)
         except FileNotFoundError:
-            print("La ruta no existe ", file_path)
+            alert_except(self, "LA RUTA NO EXISTE")
         except NotADirectoryError:
             print("La ruta no es un directorio ", file_path)
         except ValueError as e:
@@ -134,12 +134,12 @@ class MainGUI(tk.Frame):
         self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
         self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=5)
 
-        label_style(self, "AUTOMATICO", 1, 0)
+        title_style(self, "AUTOMATICO", 1, 0)
 
         self.auto_on_button = tk.Checkbutton(self, text="ACTIVAR", command=self.toggle_auto)
         self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
         
-        label_style(self, "MANUAL", 1, 2)
+        title_style(self, "MANUAL", 1, 2)
         
         self.next_button = tk.Button(self, text="INGRESAR", command=lambda: self.press_button_manual(self.next_button), **button_style)
         self.next_button.grid(row=2, column=2, pady=10, padx=10, columnspan=2)
@@ -183,7 +183,7 @@ class MainGUI(tk.Frame):
         self.index_label = tk.Label(self, text=f"INDICE : {self.index_current}")
         self.index_label.grid(row=9, column=0, pady=10, padx=10, columnspan=5)
 
-        self.close_button = tk.Button(self, text="Cerrar", command=self.master.destroy, **button_style)
+        self.close_button = tk.Button(self, text="CERRAR", command=self.master.destroy, **button_style)
         self.close_button.grid(row=10, column=0, pady=10, padx=10, columnspan=5)
 
     def update_window_label(self):
