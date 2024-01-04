@@ -30,8 +30,6 @@ STYLE_TITLE = {
   "bg":"#add8e6"
 }
 
-
-
 def alert_error(window , message, timer=2000):
     popup = tk.Toplevel(window)
     popup.title("ERROR")
@@ -49,21 +47,21 @@ def alert_success(window , message, timer=2000):
     popup.title("CAMBIO DE ESTADO")
     popup.geometry("300x50")
 
-    popup.configure(bg=BACKGROUND_COLOR_EXCEPT)
+    popup.configure(bg=BACKGROUND_COLOR_SUCCESS)
     
-    label = tk.Label(popup, text=message, **STYLE_EXCEPT)
+    label = tk.Label(popup, text=message, **STYLE_SUCCESS)
     label.pack(pady=10)
 
     popup.after(timer, popup.destroy)
     
-def alert_except(window , message, timer=5000):
+def alert_except(window , message, timer=2000):
     popup = tk.Toplevel(window)
     popup.title("EXCEPTION")
     popup.geometry("300x50")
 
-    popup.configure(bg=BACKGROUND_COLOR_SUCCESS)
+    popup.configure(bg=BACKGROUND_COLOR_EXCEPT)
     
-    label = tk.Label(popup, text=message, **STYLE_SUCCESS)
+    label = tk.Label(popup, text=message, **STYLE_EXCEPT)
     label.pack(pady=10)
 
     popup.after(timer, popup.destroy)

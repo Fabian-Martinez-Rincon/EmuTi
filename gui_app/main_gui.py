@@ -23,30 +23,26 @@ def search_window(window, master):
             alert_except(master, "ERROR AL ACTIVAR LA VENTANA")
             return False
     
-    
-def actual_data(result_label_rollers, result_label_simbol, indice, simbols, rollers):
-    
+def transform_data(index, rollers, simbols):
     rollers = eval(rollers)
-    values = ",".join(str(value) for value in rollers[indice].values())
-    result_label_rollers.config(text=f"{values}")
+    rollers = ",".join(str(value) for value in rollers[index].values())
 
     simbols = eval(simbols)
-    simbols = ",".join(str(value) for value in simbols[indice].values())
-    result_label_simbol.config(text=f"{simbols}")
+    simbols = ",".join(str(value) for value in simbols[index].values())
+
+    return rollers, simbols
 
 def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers):
-    
-    rollers = eval(rollers)
-    values = ",".join(str(value) for value in rollers[indice].values())
-    result_label_rollers.config(text=f"{values}")
+    rollers, simbols = transform_data(indice, rollers, simbols)
 
-    simbols = eval(simbols)
-    simbols = ",".join(str(value) for value in simbols[indice].values())
+    result_label_rollers.config(text=f"{rollers}")
     result_label_simbol.config(text=f"{simbols}")
 
+    
     pyautogui.press('tab')
-    pyautogui.write(values)
+    pyautogui.write(rollers)
     pyautogui.press('enter')
+    
 
 class MainGUI(tk.Frame):
     def __init__(self, master=None, *args, **kwargs):
@@ -102,9 +98,13 @@ class MainGUI(tk.Frame):
         index = self.index_current
         
         if index < len(self.rollers):
-            actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
-            self.index_current += 1
-            self.update_index_label()
+            try:
+                actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
+            except Exception as e:
+                alert_except(self, "EXCEPCION AL ESCRIBIR")
+            else:
+                self.index_current += 1
+                self.update_index_label()
         else:
             self.result_label_rollers.config(text="Terminado")
 
@@ -204,7 +204,9 @@ class MainGUI(tk.Frame):
         try:
             new_index = int(self.custom_index_entry.get())
             self.index_current = new_index
-            actual_data(self.result_label_rollers2, self.result_label_simbol2, self.index_current, self.simbols, self.rollers)
+            rollers, simbols = transform_data(self.index_current, self.rollers, self.simbols)
+            self.result_label_rollers2.config(text=f"{rollers}")
+            self.result_label_simbol2.config(text=f"{simbols}")
             self.update_index_label()
         except ValueError:
             print("Ingrese un valor numérico para el índice personalizado.")
