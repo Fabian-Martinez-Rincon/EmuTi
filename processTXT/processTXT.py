@@ -5,9 +5,14 @@ import string
 # Nombre del archivo de texto
 nombre_archivo_txt = 'jugadas.txt'
 
-# Leer las líneas del archivo y almacenarlas en una lista
+cadena_a_buscar = '	'
+cadena_nueva = ','
+
 with open(nombre_archivo_txt, 'r') as archivo:
-    lineas_txt = [linea.strip() for linea in archivo]
+    #contenido = archivo.read()
+    #contenido = contenido.replace(cadena_a_buscar, cadena_nueva)
+    lineas_txt = [linea.strip().replace(cadena_a_buscar, cadena_nueva) for linea in archivo]
+
 
 # Generar letras aleatorias para el campo 'SIMBOLO'
 simbolos = [random.choice(string.ascii_uppercase) for _ in range(len(lineas_txt))]

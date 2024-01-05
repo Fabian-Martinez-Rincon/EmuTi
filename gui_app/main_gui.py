@@ -183,8 +183,11 @@ class MainGUI(tk.Frame):
         self.index_label = tk.Label(self, text=f"INDICE : {self.index_current}")
         self.index_label.grid(row=9, column=0, pady=10, padx=10, columnspan=5)
 
+        self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
+        self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=5)
+
         self.close_button = tk.Button(self, text="CERRAR", command=self.master.destroy, **button_style)
-        self.close_button.grid(row=10, column=0, pady=10, padx=10, columnspan=5)
+        self.close_button.grid(row=11, column=0, pady=10, padx=10, columnspan=5)
 
     def update_window_label(self):
         self.window_label.config(text=f"{self.window_current}")
