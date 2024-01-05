@@ -1,69 +1,47 @@
 import tkinter as tk
 from tkinter import filedialog
-import re
-import pandas as pd
 import pygetwindow as gw
 import pyautogui
 from tkinter import messagebox
+from gui_app.data_process import process_excel
+from gui_app._macros import *
 
 
-SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.?\d*$')
-ROLLER_REGEX = re.compile(r'^R\d+$')
-
-def search_window(window):
+def search_window(window, master):
         """Busca la ventana y la activa"""
         ventana = None
         try:
             ventana = gw.getWindowsWithTitle(window)[0]
         except IndexError:
             return False
-        
-        if ventana.isMinimized:
-            ventana.restore()
-
-        ventana.activate()
-        return True
+        try:
+            if ventana.isMinimized:
+                ventana.restore()
+            ventana.activate()
+            return True
+        except Exception as e:
+            alert_except(master, "ERROR AL ACTIVAR LA VENTANA")
+            return False
     
-    
-def actual_data(result_label_rollers, result_label_simbol, indice, simbols, rollers):
-    
+def transform_data(index, rollers, simbols):
     rollers = eval(rollers)
-    values = ",".join(str(value) for value in rollers[indice].values())
-    result_label_rollers.config(text=f"{values}")
+    rollers = ",".join(str(value) for value in rollers[index].values())
 
     simbols = eval(simbols)
-    simbols = ",".join(str(value) for value in simbols[indice].values())
-    result_label_simbol.config(text=f"{simbols}")
+    simbols = ",".join(str(value) for value in simbols[index].values())
+
+    return rollers, simbols
 
 def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers):
-    
-    rollers = eval(rollers)
-    values = ",".join(str(value) for value in rollers[indice].values())
-    result_label_rollers.config(text=f"{values}")
+    rollers, simbols = transform_data(indice, rollers, simbols)
 
-    simbols = eval(simbols)
-    simbols = ",".join(str(value) for value in simbols[indice].values())
+    result_label_rollers.config(text=f"{rollers}")
     result_label_simbol.config(text=f"{simbols}")
 
+    
     pyautogui.press('tab')
-    pyautogui.write(values)
+    pyautogui.write(rollers)
     pyautogui.press('enter')
-
-def process_excel(file_name):
-    try:
-        DATOS = pd.read_excel(file_name,sheet_name=1)
-        SIMBOLS = list(filter(SIMBOLS_REGEX.match, DATOS.columns.values))
-        ROLLERS = list(filter(ROLLER_REGEX.match, DATOS.columns.values))
-        
-    except FileNotFoundError:
-        print(f"La ruta del archivo no existe: {file_name}")
-    except KeyError:
-        print(f"Columnas no corresponden con {DATOS.columns.values}")
-    except Exception as e:
-        print(f"Error al procesar {file_name}: {str(e)}")
-    else:
-        print(f"Procesado {file_name} correctamente")
-        return DATOS.loc[:, SIMBOLS].to_json(orient='records', indent=4), DATOS.loc[:, ROLLERS].to_json(orient='records', indent=4)
     
 
 class MainGUI(tk.Frame):
@@ -88,32 +66,12 @@ class MainGUI(tk.Frame):
         try:
             self.simbols, self.rollers = process_excel(file_path)
         except FileNotFoundError:
-            print("La ruta no existe ", file_path)
+            alert_except(self, "LA RUTA NO EXISTE")
         except NotADirectoryError:
             print("La ruta no es un directorio ", file_path)
+        except ValueError as e:
+            print(e)
 
-    def show_window_value(self):
-        window_value = self.window_entry.get()
-        print(f"Valor de la ventana: {window_value}")
-
-    def show_numeric_value(self):
-        numeric_value = self.value_entry.get()
-        print(f"Valor numérico: {numeric_value}")
-
-    def mostrar_error_temporal(self, mensaje, tiempo_milisegundos=2000):
-        popup = tk.Toplevel(self.master)
-        popup.title("Error")
-        popup.geometry("300x50")
-
-        # Estilos
-        popup.configure(bg="#00FFFF")  # Color de fondo blanco
-        label_style = {"font": ("Bolt", 12), "foreground": "#FF0000", "background": "#FFFFFF"}
-
-        label = tk.Label(popup, text=mensaje, **label_style)
-        label.pack(pady=10)
-
-        popup.after(tiempo_milisegundos, popup.destroy)
-        
     def press_button_manual(self, next_button):
         """Manual 
             El boton esta desactivado por defecto hasta que encuentre la ventana
@@ -132,17 +90,21 @@ class MainGUI(tk.Frame):
             messagebox.showinfo("Error","Ingrese una ventana")
             return
         
-        if not search_window(self.window_current):
-            self.mostrar_error_temporal("La ventana no esta activa")
+        if not search_window(self.window_current, self.master):
+            alert_error(self,"VENTANA INACTIVA")
             return
 
         next_button.config(state=tk.DISABLED)
         index = self.index_current
         
         if index < len(self.rollers):
-            actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
-            self.index_current += 1
-            self.update_index_label()
+            try:
+                actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
+            except Exception as e:
+                alert_except(self, "EXCEPCION AL ESCRIBIR")
+            else:
+                self.index_current += 1
+                self.update_index_label()
         else:
             self.result_label_rollers.config(text="Terminado")
 
@@ -153,17 +115,17 @@ class MainGUI(tk.Frame):
 
     def toggle_auto(self):
         if self.auto_var.get():
-            self.interval_id = self.master.after(5000, self.press_button_auto) 
+            self.interval_id = self.master.after(2000, self.press_button_auto)
+            alert_success(self,"AUTO INICIADO")
         else:
             if self.interval_id:
                 self.master.after_cancel(self.interval_id)
                 self.interval_id = None
-                print("Se desactivo todo")
+                alert_success(self,"AUTO DETENIDO")
 
     def press_button_auto(self):
-        print("Mensaje cada 2 segundos")
         self.press_button_manual(self.next_button)
-        self.interval_id = self.master.after(5000, self.press_button_auto)
+        self.interval_id = self.master.after(2000, self.press_button_auto)
 
     def create_widgets(self):
 
@@ -172,14 +134,12 @@ class MainGUI(tk.Frame):
         self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
         self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=5)
 
-        self.auto_title_label = tk.Label(self, text="AUTO", font=("Helvetica", 10, "bold"), bg="#add8e6")
-        self.auto_title_label.grid(row=1, column=0, pady=10, padx=10, columnspan=2)        
+        title_style(self, "AUTOMATICO", 1, 0)
 
         self.auto_on_button = tk.Checkbutton(self, text="ACTIVAR", command=self.toggle_auto)
         self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
-
-        self.auto_title_label = tk.Label(self, text="MANUAL", font=("Helvetica", 10, "bold"), bg="#add8e6")
-        self.auto_title_label.grid(row=1, column=2, pady=10, padx=10, columnspan=2)
+        
+        title_style(self, "MANUAL", 1, 2)
         
         self.next_button = tk.Button(self, text="INGRESAR", command=lambda: self.press_button_manual(self.next_button), **button_style)
         self.next_button.grid(row=2, column=2, pady=10, padx=10, columnspan=2)
@@ -223,7 +183,7 @@ class MainGUI(tk.Frame):
         self.index_label = tk.Label(self, text=f"INDICE : {self.index_current}")
         self.index_label.grid(row=9, column=0, pady=10, padx=10, columnspan=5)
 
-        self.close_button = tk.Button(self, text="Cerrar", command=self.master.destroy, **button_style)
+        self.close_button = tk.Button(self, text="CERRAR", command=self.master.destroy, **button_style)
         self.close_button.grid(row=10, column=0, pady=10, padx=10, columnspan=5)
 
     def update_window_label(self):
@@ -244,7 +204,9 @@ class MainGUI(tk.Frame):
         try:
             new_index = int(self.custom_index_entry.get())
             self.index_current = new_index
-            actual_data(self.result_label_rollers2, self.result_label_simbol2, self.index_current, self.simbols, self.rollers)
+            rollers, simbols = transform_data(self.index_current, self.rollers, self.simbols)
+            self.result_label_rollers2.config(text=f"{rollers}")
+            self.result_label_simbol2.config(text=f"{simbols}")
             self.update_index_label()
         except ValueError:
             print("Ingrese un valor numérico para el índice personalizado.")
