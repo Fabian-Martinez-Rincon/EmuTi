@@ -84,4 +84,11 @@ Funciona igual que el manual pero presiona el boton de forma automatica cada **x
 
 </table>
 
+### Modo Manual
+
 https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/a1616a21-17e3-4d70-b54b-98c90eedbc7a
+
+
+### Modo Automatico
+
+https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/9e3342de-a281-481a-9962-237bc6638854
