@@ -80,6 +80,10 @@ Al dar click, ingresa el primer dato del excel en la ventana definida
 
 Funciona igual que el manual pero presiona el boton de forma automatica cada **x** tiempo
 
+#### VENTANA
+
+Ingresamos el nombre de la ventana en donde queremos ingresar los datos, por ejemplo **Ingrese una combinación** 
+
 </td></tr>
 
 </table>
