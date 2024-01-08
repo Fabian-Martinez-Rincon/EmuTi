@@ -69,7 +69,8 @@ Da igual si el excel tiene otros campos, solo es importante que tenga los solici
 
 <tr><td>
 
-![Alt text](/assets/img/image-2.png)
+<img width="600px" src="/assets/img/image-2.png"> </img>
+
 </td><td>
 
 #### Manual
