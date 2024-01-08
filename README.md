@@ -80,9 +80,13 @@ Al dar click, ingresa el primer dato del excel en la ventana definida
 
 Funciona igual que el manual pero presiona el boton de forma automatica cada **x** tiempo
 
-#### VENTANA
+#### Ventana
 
 Ingresamos el nombre de la ventana en donde queremos ingresar los datos, por ejemplo **Ingrese una combinación** 
+
+#### Indice Nuevo
+
+Durante las pruebas se puede dar que uno quiero no seguir el orden implicito del excel y saltearse jugadas o empezar desde jugadas más avanzadas. Entonces podemos actualizar el indice de la jugada que queremos empezar a probar.
 
 </td></tr>
 
