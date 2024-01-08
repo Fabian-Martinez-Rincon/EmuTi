@@ -42,7 +42,9 @@
 
 ---
 
-### Manual Usuario
+## Manual Usuario
+
+### Cargar Archivo
 
 | **Pantalla Principal** | **Elegir Archivo** |
 | :---: | :---: |
@@ -63,11 +65,9 @@ Da igual si el excel tiene otros campos, solo es importante que tenga los solici
 
 ---
 
-<table>
+### Ingreso de Datos
 
-<tr><td>Pantalla Principal</td><td>Explicación</td></tr>
-
-<tr><td>
+<table><tr><td>Pantalla Principal</td><td>Explicación</td></tr><tr><td>
 
 <img width="600px" src="/assets/img/image-2.png"> </img>
 
@@ -89,9 +89,7 @@ Ingresamos el nombre de la ventana en donde queremos ingresar los datos, por eje
 
 Durante las pruebas se puede dar que uno quiero no seguir el orden implicito del excel y saltearse jugadas o empezar desde jugadas más avanzadas. Entonces podemos actualizar el indice de la jugada que queremos empezar a probar.
 
-</td></tr>
-
-</table>
+</td></tr></table>
 
 ### Modo Manual
 
@@ -101,3 +99,19 @@ https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635
 ### Modo Automatico
 
 https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/9e3342de-a281-481a-9962-237bc6638854
+
+
+---
+
+## Transformar TXT
+
+
+<table><tr><td>Pantalla Principal</td><td>Explicación</td></tr><tr><td>
+
+<img width="250px" src="/assets/img/image-3.png"> </img>
+
+</td><td>
+
+
+
+</td></tr></table>
