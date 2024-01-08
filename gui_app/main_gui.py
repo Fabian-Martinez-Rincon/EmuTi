@@ -5,6 +5,7 @@ import pyautogui
 from tkinter import messagebox
 from gui_app.data_process import process_excel
 from gui_app._macros import *
+from processTXT.processTXT import process_txt
 
 
 def search_window(window, master):
@@ -19,8 +20,7 @@ def search_window(window, master):
                 ventana.restore()
             ventana.activate()
             return True
-        except Exception as e:
-            alert_except(master, "ERROR AL ACTIVAR LA VENTANA")
+        except Exception:
             return False
     
 def transform_data(index, rollers, simbols):
@@ -65,6 +65,17 @@ class MainGUI(tk.Frame):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
             self.simbols, self.rollers = process_excel(file_path)
+        except FileNotFoundError:
+            alert_except(self, "LA RUTA NO EXISTE")
+        except NotADirectoryError:
+            print("La ruta no es un directorio ", file_path)
+        except ValueError as e:
+            print(e)
+    
+    def open_file_dialog_txt(self):
+        file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.txt")])
+        try:
+            process_txt(file_path)
         except FileNotFoundError:
             alert_except(self, "LA RUTA NO EXISTE")
         except NotADirectoryError:
@@ -183,8 +194,8 @@ class MainGUI(tk.Frame):
         self.index_label = tk.Label(self, text=f"INDICE : {self.index_current}")
         self.index_label.grid(row=9, column=0, pady=10, padx=10, columnspan=5)
 
-        self.file_button = tk.Button(self, text="SELECCIONAR ARCHIVO", command=self.open_file_dialog, **button_style)
-        self.file_button.grid(row=0, column=0, pady=10, padx=10, columnspan=5)
+        self.file_button = tk.Button(self, text="TRANSFORMAR TXT", command=self.open_file_dialog_txt, **button_style)
+        self.file_button.grid(row=10, column=0, pady=10, padx=10, columnspan=5)
 
         self.close_button = tk.Button(self, text="CERRAR", command=self.master.destroy, **button_style)
         self.close_button.grid(row=11, column=0, pady=10, padx=10, columnspan=5)

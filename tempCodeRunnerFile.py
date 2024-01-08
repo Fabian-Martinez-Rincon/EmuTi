@@ -1,0 +1,2 @@
+
+    app.resizable(False, False)
