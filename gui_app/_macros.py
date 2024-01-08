@@ -57,7 +57,13 @@ def alert_success(window , message, timer=2000):
 def alert_except(window , message, timer=2000):
     popup = tk.Toplevel(window)
     popup.title("EXCEPTION")
-    popup.geometry("300x50")
+    if len(message) <= 20:
+        popup.geometry("300x50")
+    elif len(message) <= 60:
+        popup.geometry("350x50")
+    else:
+        popup.geometry("800x50")
+    
 
     popup.configure(bg=BACKGROUND_COLOR_EXCEPT)
     

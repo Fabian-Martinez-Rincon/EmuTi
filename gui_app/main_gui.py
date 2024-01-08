@@ -8,7 +8,7 @@ from gui_app._macros import *
 from processTXT.processTXT import process_txt
 
 
-def search_window(window, master):
+def search_window(window):
         """Busca la ventana y la activa"""
         ventana = None
         try:
@@ -35,10 +35,16 @@ def transform_data(index, rollers, simbols):
 def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers):
     rollers, simbols = transform_data(indice, rollers, simbols)
 
-    result_label_rollers.config(text=f"{rollers}")
-    result_label_simbol.config(text=f"{simbols}")
+    if ("	" in rollers) and (len(rollers) > 10):
+        result_label_rollers.config(text=f"{rollers[:10]}...")
+        result_label_simbol.config(text=f"{simbols[:10]}...")
+    elif (len(rollers) > 20):
+        result_label_rollers.config(text=f"{rollers[:20]}...")
+        result_label_simbol.config(text=f"{simbols[:20]}...")
+    else:
+        result_label_rollers.config(text=f"{rollers}")
+        result_label_simbol.config(text=f"{simbols}")
 
-    
     pyautogui.press('tab')
     pyautogui.write(rollers)
     pyautogui.press('enter')
@@ -101,7 +107,7 @@ class MainGUI(tk.Frame):
             messagebox.showinfo("Error","Ingrese una ventana")
             return
         
-        if not search_window(self.window_current, self.master):
+        if not search_window(self.window_current):
             alert_error(self,"VENTANA INACTIVA")
             return
 
@@ -112,7 +118,7 @@ class MainGUI(tk.Frame):
             try:
                 actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
             except Exception as e:
-                alert_except(self, "EXCEPCION AL ESCRIBIR")
+                alert_except(self, f"EXCEPCION {e}")
             else:
                 self.index_current += 1
                 self.update_index_label()
@@ -219,8 +225,17 @@ class MainGUI(tk.Frame):
             new_index = int(self.custom_index_entry.get())
             self.index_current = new_index
             rollers, simbols = transform_data(self.index_current, self.rollers, self.simbols)
-            self.result_label_rollers2.config(text=f"{rollers}")
-            self.result_label_simbol2.config(text=f"{simbols}")
+            
+            if ("	" in rollers) and (len(rollers) > 10):
+                self.result_label_rollers2.config(text=f"{rollers[:10]}...")
+                self.result_label_simbol2.config(text=f"{simbols[:10]}...")
+            elif (len(rollers) > 20):
+                self.result_label_rollers2.config(text=f"{rollers[:20]}...")
+                self.result_label_simbol2.config(text=f"{simbols[:20]}...")
+            else:
+                self.result_label_rollers2.config(text=f"{rollers}")
+                self.result_label_simbol2.config(text=f"{simbols}")
+            
             self.update_index_label()
         except ValueError:
             print("Ingrese un valor numérico para el índice personalizado.")
