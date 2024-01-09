@@ -107,6 +107,10 @@ https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/9e3342de-a281-48
 
 Puede que ya tengamos un conjunto de datos en algun TXT con un formato especifico como por ejemplo para los Bonus. Entonces podemos transformar ese TXT a un excel con el formato que necesita el programa.
 
+El texto se puede modificar de mejor manera con el visual studio code.
+
+- [VsCodo Online](https://vscode.dev/)
+
 
 <table><tr><td>Pantalla Principal</td><td>Explicación</td></tr><tr><td>
 
