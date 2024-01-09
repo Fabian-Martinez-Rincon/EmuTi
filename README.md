@@ -105,6 +105,8 @@ https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/9e3342de-a281-48
 
 ## Transformar TXT
 
+Puede que ya tengamos un conjunto de datos en algun TXT con un formato especifico como por ejemplo para los Bonus. Entonces podemos transformar ese TXT a un excel con el formato que necesita el programa.
+
 
 <table><tr><td>Pantalla Principal</td><td>Explicación</td></tr><tr><td>
 
@@ -112,6 +114,8 @@ https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/9e3342de-a281-48
 
 </td><td>
 
-
+![Alt text](/assets/img/image-4.png)
 
 </td></tr></table>
+
+Una vez procesado el txt, ese mismo se puede usar para cargarlo en el programa.
