@@ -4,6 +4,12 @@
 
 </div>
 
+
+
+https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/d46a125b-7641-4e1c-9eef-2e4e8005a26c
+
+
+
 > Software para testear NRG de una maquina
 
 - [Guia Primer Uso](#guia-primer-uso)
