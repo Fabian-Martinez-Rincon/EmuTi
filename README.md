@@ -4,21 +4,16 @@
 
 </div>
 
-
-
 https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/d46a125b-7641-4e1c-9eef-2e4e8005a26c
-
-
 
 > Software para testear NRG de una maquina
 
 - [Guia Primer Uso](#guia-primer-uso)
 - [Manual de Usuario](#manual-usuario)
 
-
 ---
 
-### Guia Primer Uso
+### ⚙️ Guia Primer Uso
 
 1. #### Requerimientos del Sistema
 
@@ -48,9 +43,9 @@ https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/d46a125b-7641-4e
 
 ---
 
-## Manual Usuario
+## 📝 Manual Usuario
 
-### Cargar Archivo
+`Cargar Archivo`
 
 | **Pantalla Principal** | **Elegir Archivo** |
 | :---: | :---: |
@@ -69,9 +64,7 @@ Seleccionamos un excel con el siguiente formato. (Tenes un excel base como ejemp
 
 Da igual si el excel tiene otros campos, solo es importante que tenga los solicitados.
 
----
-
-### Ingreso de Datos
+`Ingreso de Datos`
 
 <table><tr><td>Pantalla Principal</td><td>Explicación</td></tr><tr><td>
 
@@ -79,37 +72,24 @@ Da igual si el excel tiene otros campos, solo es importante que tenga los solici
 
 </td><td>
 
-#### Manual
+- `Manual`:  Al dar click, ingresa el primer dato del excel en la ventana definida
 
-Al dar click, ingresa el primer dato del excel en la ventana definida
-
-#### Automatico
-
-Funciona igual que el manual pero presiona el boton de forma automatica cada **x** tiempo
-
-#### Ventana
-
-Ingresamos el nombre de la ventana en donde queremos ingresar los datos, por ejemplo **Ingrese una combinación** 
-
-#### Indice Nuevo
-
-Durante las pruebas se puede dar que uno quiero no seguir el orden implicito del excel y saltearse jugadas o empezar desde jugadas más avanzadas. Entonces podemos actualizar el indice de la jugada que queremos empezar a probar.
+- `Automatico`: Funciona igual que el manual pero presiona el boton de forma automatica cada **x** tiempo
+- `Ventana`: Ingresamos el nombre de la ventana en donde queremos ingresar los datos, por ejemplo **Ingrese una combinación** 
+- `Indice Nuevo` Durante las pruebas se puede dar que uno quiero no seguir el orden implicito del excel y saltearse jugadas o empezar desde jugadas más avanzadas. Entonces podemos actualizar el indice de la jugada que queremos empezar a probar.
 
 </td></tr></table>
 
-### Modo Manual
+### 🛠️ Modo Manual
 
 https://github.com/Fabian-Martinez-Rincon/Fabian-Martinez-Rincon/assets/55964635/a1616a21-17e3-4d70-b54b-98c90eedbc7a
 
 
-### Modo Automatico
+### 🤖 Modo Automatico
 
 https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/9e3342de-a281-481a-9962-237bc6638854
 
-
----
-
-## Transformar TXT
+### 📝Transformar TXT
 
 Puede que ya tengamos un conjunto de datos en algun TXT con un formato especifico como por ejemplo para los Bonus. Entonces podemos transformar ese TXT a un excel con el formato que necesita el programa.
 
