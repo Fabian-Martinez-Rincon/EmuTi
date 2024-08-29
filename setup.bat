@@ -8,10 +8,8 @@ call .venv\Scripts\activate
 echo Installing dependencies...
 pip install -r .\assets\requirements.txt
 
-
-
 :: Ejecutar el script test.py
-python .\otros\new.py
+python .\main.py
 
 :: Desactivar el entorno virtual
 deactivate
