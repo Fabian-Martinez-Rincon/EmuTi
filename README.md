@@ -8,8 +8,8 @@ https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/d46a125b-7641-4e
 
 > Software para testear NRG de una maquina
 
-- [Guia Primer Uso](#guia-primer-uso)
-- [Manual de Usuario](#manual-usuario)
+- [Guia Primer Uso](#️-guia-primer-uso)
+- [Manual de Usuario](#-manual-usuario)
 
 ---
 
