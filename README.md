@@ -43,7 +43,7 @@ https://github.com/Fabian-Martinez-Rincon/EmuTi/assets/55964635/d46a125b-7641-4e
 
 ---
 
-## 📝 Manual Usuario
+### 📝 Manual Usuario
 
 `Cargar Archivo`
 
