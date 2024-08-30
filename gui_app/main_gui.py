@@ -100,7 +100,29 @@ class MainGUI(tk.Frame):
         self.interval_id = None
 
     def open_file_dialog(self):
-        file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
+        """
+        Abre un cuadro de diálogo para seleccionar un archivo Excel (.xlsx) y 
+        procesa su contenido.
+
+        Utiliza tkinter para seleccionar un archivo y luego lo procesa con 
+        `process_excel`. Maneja excepciones si la ruta del archivo no existe, 
+        no es un directorio válido, o si ocurre un error de valor.
+
+        Args:
+            self: Instancia de la clase que contiene este método, necesaria 
+            para manejar la GUI.
+
+        Exceptions:
+            FileNotFoundError: Si la ruta del archivo no existe.
+            NotADirectoryError: Si la ruta seleccionada no es un directorio.
+            ValueError: Si ocurre un error durante el procesamiento.
+        """
+        file_path = filedialog.askopenfilename(
+            title="Seleccionar archivo",
+            filetypes=[(
+                "Archivos de texto",
+                "*.xlsx"
+                )])
         try:
             self.simbols, self.rollers = process_excel(file_path)
         except FileNotFoundError:
@@ -111,7 +133,31 @@ class MainGUI(tk.Frame):
             print(e)
 
     def open_file_dialog_txt(self):
-        file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.txt")])
+        """
+        Abre un cuadro de diálogo para seleccionar un archivo de texto (.txt) 
+        y procesa su contenido.
+
+        Utiliza tkinter para abrir el cuadro de diálogo. Tras seleccionar un 
+        archivo, intenta procesarlo con `process_txt`. Maneja excepciones si 
+        el archivo no existe, no es un directorio válido o si ocurre un error 
+        de valor.
+
+        Args:
+            self: Instancia de la clase que contiene el método, necesaria para 
+            gestionar la GUI.
+
+        Exceptions:
+            FileNotFoundError: Si la ruta del archivo no existe.
+            NotADirectoryError: Si la ruta seleccionada no es un directorio.
+            ValueError: Si ocurre un error durante el procesamiento.
+        """
+        file_path = filedialog.askopenfilename(
+            title="Seleccionar archivo",
+            filetypes=[(
+                "Archivos de texto", 
+                "*.txt"
+            )]
+        )
         try:
             process_txt(file_path)
         except FileNotFoundError:
@@ -143,10 +189,16 @@ class MainGUI(tk.Frame):
 
         next_button.config(state=tk.DISABLED)
         index = self.index_current
-        
+
         if index < len(self.rollers):
             try:
-                actions(self.result_label_rollers, self.result_label_simbol, index, self.simbols, self.rollers)
+                actions(
+                    self.result_label_rollers,
+                    self.result_label_simbol,
+                    index,
+                    self.simbols,
+                    self.rollers
+                )
             except Exception as e:
                 alert_except(self, f"EXCEPCION {e}")
             else:
