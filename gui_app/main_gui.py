@@ -5,7 +5,7 @@ import pyautogui
 from tkinter import messagebox
 from gui_app.data_process import process_excel
 from gui_app._macros import *
-from processTXT.processTXT import process_txt
+from processTXT.process_txt import process_txt
 
 
 def search_window(window):
