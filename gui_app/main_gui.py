@@ -1,28 +1,37 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog,messagebox
+
 import pygetwindow as gw
 import pyautogui
-from tkinter import messagebox
+
 from gui_app.data_process import process_excel
-from gui_app._macros import *
+from gui_app._macros import alert_error, alert_success, title_style, alert_except
 from processTXT.process_txt import process_txt
 
 
 def search_window(window):
-        """Busca la ventana y la activa"""
-        ventana = None
-        try:
-            ventana = gw.getWindowsWithTitle(window)[0]
-        except IndexError:
-            return False
-        try:
-            if ventana.isMinimized:
-                ventana.restore()
-            ventana.activate()
-            return True
-        except Exception:
-            return False
-    
+    """
+    Busca la ventana por su título y la activa si está minimizada.
+
+    Args:
+        window (str): Título de la ventana a buscar.
+
+    Returns:
+        bool: True si la ventana se encuentra y se activa, False en caso contrario.
+    """
+    ventana = None
+    try:
+        ventana = gw.getWindowsWithTitle(window)[0]
+    except IndexError:
+        return False
+    try:
+        if ventana.isMinimized:
+            ventana.restore()
+        ventana.activate()
+        return True
+    except (AttributeError, TypeError):
+        return False
+
 def transform_data(index, rollers, simbols):
     rollers = eval(rollers)
     rollers = ",".join(str(value) for value in rollers[index].values())
