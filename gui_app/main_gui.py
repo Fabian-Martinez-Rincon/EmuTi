@@ -33,6 +33,19 @@ def search_window(window):
         return False
 
 def transform_data(index, rollers, simbols):
+    """
+    Transforma los datos de entrada en cadenas concatenadas de valores basados en un índice.
+
+    Args:
+        index (int): El índice para acceder a los valores en `rollers` y `simbols`.
+        rollers (str): Una representación en cadena de un diccionario o lista que 
+        contiene los datos de 'rollers'.
+        simbols (str): Una representación en cadena de un diccionario o lista que 
+        contiene los datos de 'simbols'.
+
+    Returns:
+        tuple: Una tupla que contiene las cadenas transformadas de `rollers` y `simbols`.
+    """
     rollers = eval(rollers)
     rollers = ",".join(str(value) for value in rollers[index].values())
 
@@ -42,6 +55,17 @@ def transform_data(index, rollers, simbols):
     return rollers, simbols
 
 def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers):
+    """
+    Actualiza las etiquetas de resultado y automatiza la entrada de datos según la 
+    longitud de los textos.
+
+    Args:
+        result_label_rollers (tk.Label): Etiqueta para mostrar los resultados de 'rollers'.
+        result_label_simbol (tk.Label): Etiqueta para mostrar los resultados de 'simbols'.
+        indice (int): Índice para transformar los datos.
+        simbols (str): Datos de símbolos procesados.
+        rollers (str): Datos de rodillos procesados.
+    """
     rollers, simbols = transform_data(indice, rollers, simbols)
 
     if ("	" in rollers) and (len(rollers) > 10):
@@ -57,7 +81,6 @@ def actions(result_label_rollers, result_label_simbol, indice, simbols, rollers)
     pyautogui.press('tab')
     pyautogui.write(rollers)
     pyautogui.press('enter')
-    
 
 class MainGUI(tk.Frame):
     def __init__(self, master=None, *args, **kwargs):
@@ -75,7 +98,7 @@ class MainGUI(tk.Frame):
         self.auto_on_button.config(variable=self.auto_var)
 
         self.interval_id = None
-        
+
     def open_file_dialog(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
         try:
@@ -86,7 +109,7 @@ class MainGUI(tk.Frame):
             print("La ruta no es un directorio ", file_path)
         except ValueError as e:
             print(e)
-    
+
     def open_file_dialog_txt(self):
         file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.txt")])
         try:
@@ -111,11 +134,9 @@ class MainGUI(tk.Frame):
         if not self.rollers:
             messagebox.showinfo("Error", "Seleccione un archivo")
             return
-        
         if not self.window_current:
             messagebox.showinfo("Error","Ingrese una ventana")
             return
-        
         if not search_window(self.window_current):
             alert_error(self,"VENTANA INACTIVA")
             return
@@ -164,9 +185,9 @@ class MainGUI(tk.Frame):
 
         self.auto_on_button = tk.Checkbutton(self, text="ACTIVAR", command=self.toggle_auto)
         self.auto_on_button.grid(row=2, column=0, pady=10, padx=10, columnspan=2)
-        
+
         title_style(self, "MANUAL", 1, 2)
-        
+
         self.next_button = tk.Button(self, text="INGRESAR", command=lambda: self.press_button_manual(self.next_button), **button_style)
         self.next_button.grid(row=2, column=2, pady=10, padx=10, columnspan=2)
 
@@ -196,7 +217,7 @@ class MainGUI(tk.Frame):
 
         self.result_label_rollers = tk.Label(self, text="1, 1, 1, 1, 1")
         self.result_label_rollers.grid(row=8, column=0, pady=10, padx=10, columnspan=2)
-        
+
         self.auto_title_label = tk.Label(self, text="INDICE DATOS", bg="#add8e6")
         self.auto_title_label.grid(row=6, column=2, pady=10, padx=10, columnspan=2)
 
@@ -234,7 +255,7 @@ class MainGUI(tk.Frame):
             new_index = int(self.custom_index_entry.get())
             self.index_current = new_index
             rollers, simbols = transform_data(self.index_current, self.rollers, self.simbols)
-            
+
             if ("	" in rollers) and (len(rollers) > 10):
                 self.result_label_rollers2.config(text=f"{rollers[:10]}...")
                 self.result_label_simbol2.config(text=f"{simbols[:10]}...")
@@ -244,7 +265,7 @@ class MainGUI(tk.Frame):
             else:
                 self.result_label_rollers2.config(text=f"{rollers}")
                 self.result_label_simbol2.config(text=f"{simbols}")
-            
+
             self.update_index_label()
         except ValueError:
             print("Ingrese un valor numérico para el índice personalizado.")
