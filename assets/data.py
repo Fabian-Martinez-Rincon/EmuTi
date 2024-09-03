@@ -1,7 +1,8 @@
-import pandas as pd
 import re
-from tkinter import filedialog
 import os
+from tkinter import filedialog
+import pandas as pd
+
 
 SIMBOLS_REGEX = re.compile(r'^SIMBOLO\.?\d*$')
 ROLLER_REGEX = re.compile(r'^R\d+$')
@@ -30,7 +31,10 @@ def process_excel(file_name):
 
         return simbols_path, rollers_path
 
-file_path = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.xlsx")])
+file_path = filedialog.askopenfilename(
+    title="Seleccionar archivo",
+    filetypes=[("Archivos de texto", "*.xlsx")]
+)
 simbols, rollers = process_excel(file_path)
 
 print(f"Simbols saved to: {simbols}")
